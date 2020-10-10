@@ -1,3 +1,4 @@
+#include <Joystick.h>
 #include<Keyboard.h>
 
 #define FIRSTPIN_RIGHTHEADER 22
@@ -106,7 +107,7 @@ void setup()
   //Setting up digital pins
   int counter = 0;
   for(int i = FIRSTPIN_RIGHTHEADER; i < LASTPIN_RIGHTHEADER; i++){
-    pinMode(i, INPUT);
+    pinMode(i, INPUT_PULLUP);
     digitalPins[counter] = i;
     digitalVals[counter] = 0;
     counter++;
@@ -127,8 +128,8 @@ void loop()
   //digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
   //delay(1000);                       // wait for a second
   //digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
-  delay(500);
-  bool value = digitalRead(30);
+  delay(1);
+  int value = digitalRead(30);
   Serial.print("Value of pin 30: ");
   Serial.println(value);
 }
