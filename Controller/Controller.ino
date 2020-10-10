@@ -49,7 +49,7 @@ class Joystick
       
       int getAnalogValueY()
       {
-        int rawValue = analogRead(m_analogPinX);
+        int rawValue = analogRead(m_analogPinY);
         int value = map(rawValue, 0, 1023, m_minAnalogValue, m_maxAnalogValue);
         return value;
       }
