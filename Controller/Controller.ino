@@ -14,10 +14,21 @@ int toggleVals[LEN_TOGGLEPINS];
 char toggleKeys[LEN_TOGGLEPINS];
 int analogPins[LEN_ANALOGPINS] = {A6,A7,A8,A9,64};
 int buttonPins[LEN_BUTTONPINS];
+int buttonVals[LEN_BUTTONPINS];
 char buttonKeys[LEN_BUTTONPINS];
 //ThreeAxisJoystick stick1, stick2;
 Joystick_ joysticklib;
 
+void serialAnalogInputs(){
+  int x = analogRead(analogPins[0]);
+  int y = analogRead(analogPins[1]);
+  int z = analogRead(analogPins[2]);
+  int throttle = analogRead(analogPins[3]);
+  Serial.println("X-axis:"+String(x));
+  Serial.println("Y-axis:"+String(y));
+  Serial.println("Z-axis:"+String(z));
+  Serial.println("Throttle-axis:"+String(throttle));
+}
 void checkAnalogInputs()
 {
   joysticklib.setXAxis(analogRead(analogPins[0]));
@@ -33,10 +44,10 @@ void checkToggleInputs()
   {
     int currentval = digitalRead(togglePins[i]);
     if(currentval!=toggleVals[i]){
-      Keyboard.print("ajaja");
-      delay(200);
+      Keyboard.write(toggleKeys[i]);
+      delay(20);
       toggleVals[i]=currentval;
-      delay(1000);
+      delay(10);
     }
   }
 }
@@ -45,9 +56,16 @@ void checkButtonInputs()
 {
   for(int i=0; i<LEN_BUTTONPINS;i++)
   {
-    if(digitalRead(buttonPins[i])==LOW) {
-      Keyboard.print("hei");
-      delay(10);
+    int currentval = digitalRead(buttonPins[i]);
+    if(currentval!=buttonVals[i]) {
+      switch(currentval){
+        case HIGH:
+          Keyboard.release(buttonKeys[i]);
+          break;
+        case LOW:
+          Keyboard.press(buttonKeys[i]);
+      }
+      buttonVals[i] = currentval;
     }
   }
 }
@@ -67,8 +85,6 @@ checkAnalogInputs();
 
 
 void testSetup(){
-
-  //setting up communication and initial stuff
   Keyboard.begin();
   joysticklib.begin(true);
 
@@ -82,7 +98,7 @@ void testSetup(){
   pinMode(30,INPUT_PULLUP);
   buttonPins[0] = 26;
   buttonPins[1] = 30;
-  buttonKeys[0] = 'a'; //Space
+  buttonKeys[0] = 'm'; //Space
   buttonKeys[1] = 'b';//R
 
 
