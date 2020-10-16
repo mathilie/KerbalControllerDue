@@ -31,9 +31,9 @@ void serialAnalogInputs(){
 }
 void checkAnalogInputs()
 {
-  joysticklib.setXAxis(512-analogRead(analogPins[0]));
-  joysticklib.setYAxis(512-analogRead(analogPins[1]));
-  joysticklib.setZAxis(512-analogRead(analogPins[3]));
+  joysticklib.setXAxis(floor(analogRead(analogPins[0])/2));
+  joysticklib.setYAxis(floor(analogRead(analogPins[1])/2));
+  joysticklib.setZAxis(floor(analogRead(analogPins[3])/2));
 }
 
 
@@ -103,9 +103,9 @@ void testSetup(){
 
   //------setting up joysticks-------------
 
-  joysticklib.setXAxisRange(-511,512);
-  joysticklib.setYAxisRange(-511,512);
-  joysticklib.setZAxisRange(-511,512);
+  joysticklib.setXAxisRange(0,512);
+  joysticklib.setYAxisRange(0,512);
+  joysticklib.setZAxisRange(0,512);
 
   //----------Setting up throttle----------
   joysticklib.setThrottleRange(0,1023);
