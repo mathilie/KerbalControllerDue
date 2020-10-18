@@ -1,5 +1,5 @@
 #include <Joystick.h>
-#include<Keyboard.h>
+#include <Keyboard.h>
 
 #define FIRSTPIN_RIGHTHEADER 22
 #define LASTPIN_RIGHTHEADER 53
@@ -19,21 +19,12 @@ char buttonKeys[LEN_BUTTONPINS];
 //ThreeAxisJoystick stick1, stick2;
 Joystick_ joysticklib;
 
-void serialAnalogInputs(){
-  int x = analogRead(analogPins[0]);
-  int y = analogRead(analogPins[1]);
-  int z = analogRead(analogPins[2]);
-  int throttle = analogRead(analogPins[3]);
-  Serial.println("X-axis:"+String(x));
-  Serial.println("Y-axis:"+String(y));
-  Serial.println("Z-axis:"+String(z));
-  Serial.println("Throttle-axis:"+String(throttle));
-}
+
 void checkAnalogInputs()
 {
-  joysticklib.setXAxis(floor(analogRead(analogPins[0])/2));
-  joysticklib.setYAxis(floor(analogRead(analogPins[1])/2));
-  joysticklib.setZAxis(floor(analogRead(analogPins[3])/2));
+  joysticklib.setXAxis(analogRead(analogPins[0]));
+  joysticklib.setYAxis(analogRead(analogPins[1]));
+  joysticklib.setZAxis(analogRead(analogPins[3]));
 }
 
 
@@ -101,80 +92,6 @@ void testSetup(){
   buttonKeys[1] = 'b';//R
 
 
-  //------setting up joysticks-------------
 
-  joysticklib.setXAxisRange(0,512);
-  joysticklib.setYAxisRange(0,512);
-  joysticklib.setZAxisRange(0,512);
-
-  //----------Setting up throttle----------
-  joysticklib.setThrottleRange(0,1023);
 
 }
-
-
-/******************************************
-*                                         *
-*    HELPING CLASSES                      *
-*                                         *
-******************************************/
-class Joystick
-{
-    public:
-      Joystick() = delete;
-      Joystick(int analogPinX, int analogPinY, int digitalPin, int maxAnalogValue, int minAnalogValue):
-        m_analogPinX(analogPinX),
-        m_analogPinY(analogPinY),
-        m_digitalPin(digitalPin),
-        m_maxAnalogValue(maxAnalogValue),
-        m_minAnalogValue(minAnalogValue)
-        {}
-
-      int getAnalogValueX()
-      {
-        int rawValue = analogRead(m_analogPinX);
-        int value = map(rawValue, 0, 1023, m_minAnalogValue, m_maxAnalogValue);
-        return value;
-      }
-
-      int getAnalogValueY()
-      {
-        int rawValue = analogRead(m_analogPinY);
-        int value = map(rawValue, 0, 1023, m_minAnalogValue, m_maxAnalogValue);
-        return value;
-      }
-
-
-      bool getDigitalValue()
-      {
-        bool value = digitalRead(m_digitalPin);
-        return value;
-      }
-
-    protected:
-      int m_maxAnalogValue;
-      int m_minAnalogValue;
-      int m_analogPinX;
-      int m_analogPinY;
-      int m_digitalPin;
-};
-
-class ThreeAxisJoystick: public Joystick {
-  public:
-    ThreeAxisJoystick() = delete;
-    ThreeAxisJoystick(int analogPinX, int analogPinY, int analogPinZ, int digitalPin, int maxAnalogValue, int minAnalogValue):
-        Joystick(analogPinX, analogPinY, digitalPin, maxAnalogValue, minAnalogValue),
-        m_analogPinZ(analogPinZ)
-        {}
-
-      int getAnalogValueZ()
-      {
-        int rawValue = analogRead(m_analogPinZ);
-        int value = map(rawValue, 0, 1023, m_minAnalogValue, m_maxAnalogValue);
-        return value;
-      }
-
-  private:
-    int m_analogPinZ;
-
-};
